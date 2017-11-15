@@ -7,6 +7,7 @@ import {
   Dimensions,
   Animated,
   TouchableWithoutFeedback,
+  I18nManager,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
@@ -232,10 +233,16 @@ export default class SideMenu extends React.Component {
     return !disableGestures;
   }
 
+  get boundryStyle() {
+    const { menuPosition } = this.props
+    if (menuPosition === 'right' || I18nManager.isRTL && menuPosition === 'left') {
+      return { left: this.state.width - this.state.openMenuOffset }
+    }
+    return { right: this.state.width - this.state.openMenuOffset }
+  }
+
   render(): React.Element<void, void> {
-    const boundryStyle = this.props.menuPosition === 'right' ?
-      { left: this.state.width - this.state.openMenuOffset } :
-      { right: this.state.width - this.state.openMenuOffset };
+    const { boundryStyle } = this;
 
     const menu = (
       <View style={[styles.menu, boundryStyle]}>
